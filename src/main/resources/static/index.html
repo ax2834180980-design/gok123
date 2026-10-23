@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>23级物联网专业</title>
+    <link rel="stylesheet" href="./css/fengmingqi.css">
+    <script src="js/echarts.min.js"></script>
+    <script src="js/axios.min.js"></script>
+</head>
+<body>
+<main class="dashboard-shell">
+    <header class="dashboard-header">
+        <div>
+            <div class="eyebrow">HarmonyOS Mine IoT</div>
+            <h1>基于鸿蒙智慧矿井-23级物联网专业</h1>
+        </div>
+        <div class="header-status">
+            <span class="status-dot"></span>
+            <span>实时监测</span>
+        </div>
+    </header>
+
+    <section class="dashboard-grid">
+        <article class="panel panel-chart">
+            <div class="panel-title">环境温度</div>
+            <div id="gaugewendu" class="chart-box"></div>
+        </article>
+
+        <article class="panel panel-chart">
+            <div class="panel-title">空气湿度</div>
+            <div id="gaugeshidu" class="chart-box"></div>
+        </article>
+
+        <article class="panel panel-servo">
+            <div class="panel-title">舵机角度</div>
+            <div id="duoji" class="chart-box">舵机</div>
+            <div class="slider-container">
+                <div class="slider-topline">
+                    <span>当前角度</span>
+                    <span id="sliderValue">90°</span>
+                </div>
+                <input type="range" min="0" max="180" step="1" value="90" id="slider" aria-label="舵机当前角度">
+            </div>
+        </article>
+
+        <article class="panel panel-chart">
+            <div class="panel-title">人体感知</div>
+            <div id="rentiganzhi" class="chart-box"></div>
+        </article>
+
+        <article class="panel alarm-panel" id="alarmPanel">
+            <div id="fengmingqi" class="alarm-chart"></div>
+            <div class="status-light gray-disable" id="light"></div>
+            <button class="alarm-btn" onclick="switchAlarm()">报警</button>
+            <button class="disable-btn" onclick="switchDisable()">关闭</button>
+        </article>
+
+        <article class="panel config-panel">
+            <div class="panel-title">联动配置</div>
+            <div class="mode-row">
+                <span>运行模式</span>
+                <select id="controlMode" onchange="peizhimessage(this.value)">
+                    <option value="0">手动</option>
+                    <option value="1" selected>自动</option>
+                </select>
+            </div>
+            <div class="auto-copy">自动：设置以下参数，当温度 >= 阈值，蜂鸣器自动报警；同时舵机旋转 90 度</div>
+            <div id="peizhi" class="config-form">
+                <label>
+                    <span>温度阈值</span>
+                    <input type="number" id="temperatureThreshold" value="40">
+                </label>
+                <label>
+                    <span>旋转角度</span>
+                    <input type="number" id="autoServoAngle" min="0" max="180" value="90">
+                </label>
+                <div id="autoControlStatus" class="auto-status">自动模式待机</div>
+            </div>
+        </article>
+    </section>
+</main>
+
+<script src="./js/gaugewendu.js"></script>
+<script src="./js/gaugeshidu.js"></script>
+<script src="./js/rentiganzhi.js"></script>
+<script src="./js/duoji.js"></script>
+<script src="./js/fengmingqi.js"></script>
+<script src="./js/websocket.js"></script>
+
+<script>
+    function peizhimessage(value) {
+        const config = document.getElementById('peizhi');
+        if (config) {
+            config.style.display = value == 0 ? 'none' : 'grid';
+        }
+        if (typeof refreshAutoControl === 'function') {
+            refreshAutoControl();
+        }
+    }
+
+    ['temperatureThreshold', 'autoServoAngle'].forEach(function (id) {
+        const input = document.getElementById(id);
+        if (input) {
+            const onConfigInput = function () {
+                if (typeof refreshAutoControl === 'function') {
+                    refreshAutoControl();
+                }
+            };
+            input.addEventListener('input', onConfigInput);
+            input.addEventListener('change', onConfigInput);
+        }
+    });
+
+    peizhimessage(document.getElementById('controlMode').value);
+
+    option_rentiganzhi.series[0].data[0].value = 1;
+    myChart_rentiganzhi.setOption(option_rentiganzhi);
+</script>
+</body>
+</html>

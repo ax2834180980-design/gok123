@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: "${DB_URL:jdbc:mysql://localhost:3306/wlw2023?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai}"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: "${DB_USERNAME:root}"
+    password: "${DB_PASSWORD}"
+
+  mqtt:
+    host: "${MQTT_HOST:tcp://localhost:1883}"
+    username: "${MQTT_USERNAME:}"
+    password: "${MQTT_PASSWORD:}"
+    client-id: "${MQTT_CLIENT_ID:wlw-java-${random.uuid}}"
+    client-topic: "${MQTT_SUB_TOPIC:iot/data}"
+    client-send: "${MQTT_PUB_TOPIC:iot/control}"
