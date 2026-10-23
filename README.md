@@ -2,6 +2,14 @@
 
 基于 Spring Boot、MySQL、MQTT 和 WebSocket 的物联网监控与控制项目，包含温湿度显示、人体感知、蜂鸣器报警和舵机控制页面。
 
+## 前端展示
+
+![物联网实时监控大屏](docs/images/dashboard.png)
+
+监控大屏包含环境温度、空气湿度、舵机角度、人体感知、蜂鸣器报警控制，以及温度阈值与舵机角度联动配置。
+
+前端源码位于 `src/main/resources/static/`，启动后访问 `http://localhost:8080/`。实时数据与控制功能需要连接后端及 MQTT 服务。
+
 ## 项目来源
 
 本项目基于课程项目 https://gitee.com/wyjsxty/wlw_2023_java 继续开发，保留代码中的原作者署名。
